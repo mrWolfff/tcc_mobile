@@ -19,12 +19,9 @@ import com.example.tcc_mobile.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -61,8 +58,9 @@ public class create_demanda extends AppCompatActivity {
         token = prefs.getString("token", "No name defined");
         id = prefs.getInt("id", 0);
         Log.e("token ", token + " ID " + id);
-
         try {
+            spinnerArray.add("Diarista/Limpeza");
+            spinnerArray.add("Construção/Civil");
             categoria_spinner = findViewById(R.id.categoria);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(create_demanda.this, android.R.layout.simple_spinner_item, spinnerArray);
             categoria_spinner.setAdapter(spinnerAdapter);
@@ -74,14 +72,10 @@ public class create_demanda extends AppCompatActivity {
         }catch (Exception e){
             Log.e("erro", e.getMessage());
         }
-
-
     }
 
     public void create_demanda_post(View view) {
-
-
-
+        new Create_Demanda().execute();
     }
 
     private class Create_Demanda extends AsyncTask<Void, Void, Void>{
@@ -89,8 +83,8 @@ public class create_demanda extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             dialog = new ProgressDialog(create_demanda.this, R.style.styleProgressDialog);
-            dialog.setTitle("Deletando");
-            dialog.setMessage("Deletando a demanda...");
+            dialog.setTitle("Nova demanda!");
+            dialog.setMessage("Criando a demanda...");
             dialog.show();
         }
 
@@ -147,8 +141,6 @@ public class create_demanda extends AppCompatActivity {
                     });
                     startActivity(new Intent(create_demanda.this, demandas.class));
                 }
-                Intent intent = new Intent(create_demanda.this, demandas.class);
-                startActivity(intent);
             } catch (ProtocolException ex) {
                 Log.e("protocol", ex.getMessage());
             } catch (IOException ex) {
@@ -160,54 +152,5 @@ public class create_demanda extends AppCompatActivity {
         }
     }
 
-    private class Get_Categorias extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... voids) {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("id", id);
-                json.put("token", token);
 
-                URL url = new URL("http://192.168.0.104:8000/get_categoria");
-                final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                //connection.setRequestProperty("X-CSRFToken", token);
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                writer.write(json.toString());
-                writer.flush();
-                writer.close();
-                outputStream.close();
-                connection.connect();
-                final int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    String line = null;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder builder = new StringBuilder();
-                    for (line = null; (line = br.readLine()) != null; ) {
-                        builder.append(line).append("\n");
-                    }
-                    JSONTokener tokener = new JSONTokener(builder.toString());
-                    JSONObject finalResult = new JSONObject(tokener);
-                    Log.e("result", finalResult.toString());
-                    for (int i = 0; i < finalResult.length(); i++){
-                        spinnerArray.add(finalResult.getString("categoria"));
-                    }
-                }
-                Intent intent = new Intent(create_demanda.this, demandas.class);
-                startActivity(intent);
-            } catch (ProtocolException ex) {
-                Log.e("protocol", ex.getMessage());
-            } catch (IOException ex) {
-                Log.e("io", ex.getMessage());
-            } catch (JSONException ex) {
-                Log.e("json", ex.getMessage());
-            }
-            return null;
-        }
-    }
 }

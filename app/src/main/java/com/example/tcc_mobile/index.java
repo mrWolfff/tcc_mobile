@@ -1,6 +1,8 @@
 package com.example.tcc_mobile;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,13 +21,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tcc_mobile.adapters.Demandas_Adapter;
+import com.example.tcc_mobile.adapters.Categorias_Adapter;
+import com.example.tcc_mobile.classes.Categoria;
 import com.example.tcc_mobile.classes.Demandas;
 import com.example.tcc_mobile.classes.User;
 import com.example.tcc_mobile.interfaces.Actions;
 import com.example.tcc_mobile.views.box_message;
+import com.example.tcc_mobile.views.categoria_atual;
 import com.example.tcc_mobile.views.create_demanda;
 import com.example.tcc_mobile.views.demandas;
 import com.example.tcc_mobile.views.servicos;
@@ -52,21 +59,20 @@ import static com.example.tcc_mobile.R.id.nav_gallery;
 
 public class index extends AppCompatActivity implements Actions {
 
-    TextView text_result;
     TextView title;
     TextView name;
     TextView email;
-    private String token;
-    private int id;
+    String token;
+    int id;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     ProgressDialog dialog;
     User user = new User();
-    List<Demandas> listademandas = new ArrayList<>();
-    Demandas_Adapter adapter;
+    List<Categoria> listacategorias = new ArrayList<>();
+    Categorias_Adapter adapter;
     RecyclerView recyclerView;
-
-
+    NavigationView navigationView;
+    NavController navController;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -75,30 +81,25 @@ public class index extends AppCompatActivity implements Actions {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        //  ------ SHARED PREFERENCES -----
-        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
-        token = prefs.getString("token", "No name defined");
-        id = prefs.getInt("id", 0);
-        Log.e("token ", token + " ID " + id);
-        new index.Request_User().execute();
-
-
-
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //  ------ SHARED PREFERENCES -----
+        //prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+        //token = prefs.getString("token", "No name defined");
+        //id = prefs.getInt("id", 0);
+        //Log.e("token ", token + " ID " + id);
+
+        //
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
         // ----  MENU LATERAL -----
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -135,27 +136,44 @@ public class index extends AppCompatActivity implements Actions {
                 return false;
             }
         });
-
-
-
+        View nav = navigationView.getHeaderView(0);
         title = findViewById(R.id.texto_titulo);
-        name = navigationView.findViewById(R.id.name);
-        email = navigationView.findViewById(R.id.email);
+        name = nav.findViewById(R.id.nav_name);
+        email = nav.findViewById(R.id.nav_email);
 
-        //Bundle bundle = getIntent().getExtras();
-        //user = bundle.getParcelable("user");
-
-        try {
-            Log.e("EMAILLLLLLLL", user.getEmail());
-            String texto = "Bem vindo, " + user.get_full_name();
-            title.setText(texto);
-            name.setText(texto);
-            email.setText(texto);
+        Bundle bundle = getIntent().getExtras();
+        try{
+            user = bundle.getParcelable("user");
         }catch (Exception e){
             e.printStackTrace();
         }
+        editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
+        editor.putString("token", user.getToken());
+        editor.putInt("id", user.getID());
+        editor.apply();
+        boolean one = false;
+        Log.e("name", String.valueOf(name == null));
+        Log.e("email", String.valueOf(email == null));
+        name.setText(user.get_full_name());
+        email.setText(user.getEmail());
+        if(user.getCategoria_user().equals("Prestador"))
+            startActivity(new Intent(index.this, index_prestador.class));
+
+        new Request_User().execute();
+        new Get_Categorias().execute();
+
+
     }
 
+    private void setRecyclerView(){
+        adapter = new Categorias_Adapter(listacategorias, this);
+        recyclerView =  findViewById(R.id.index_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+        //ItemTouchHelper touchHelper = new ItemTouchHelper(new TouchHelp(adapter));
+        //touchHelper.attachToRecyclerView(recyclerView);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,10 +197,32 @@ public class index extends AppCompatActivity implements Actions {
     }
 
     public void logout(MenuItem item) {
-        editor.clear();
-        editor.apply();
-        Intent intent = new Intent(index.this, login.class);
-        startActivity(intent);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(index.this);
+                alert.setTitle("Logout!");
+                alert.setMessage("Voce tem certeza que deseja sair?");
+
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        editor.clear();
+                        editor.apply();
+                        Intent intent = new Intent(index.this, login.class);
+                        startActivity(intent);
+                    }
+                });
+                alert.setNegativeButton("Não",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+
+                alert.show();
+            }
+        });
+
     }
 
     @Override
@@ -193,87 +233,22 @@ public class index extends AppCompatActivity implements Actions {
     }
     @Override
     public void edit(int position) {
+        Intent intent = new Intent(this, categoria_atual.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("categoria", adapter.getLista_categorias().get(position));
+        bundle.putSerializable("position", position);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
-    private class Request_User extends AsyncTask<Void,Void,Void>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(index.this, R.style.styleProgressDialog);
-            dialog.setTitle("Carregando");
-            dialog.setMessage("Verificando o usuario...");
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            dialog.dismiss();
-        }
-
+    private class Get_Categorias extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
             JSONObject json = new JSONObject();
             try {
-                json.put("token", token);
-                json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                writer.write(json.toString());
-                writer.flush();
-                writer.close();
-                outputStream.close();
-                connection.connect();
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    String line = null;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder builder = new StringBuilder();
-                    for (line = null; (line = br.readLine()) != null; ) {
-                        builder.append(line).append("\n");
-                    }
-                    JSONTokener tokener = new JSONTokener(builder.toString());
-                    JSONObject finalResult = new JSONObject(tokener);
-                    Log.e("222222", finalResult.toString());
-                    User user = new User();
-                    user.setFirst_name(finalResult.getString("first_name"));
-                    user.setLast_name(finalResult.getString("last_name"));
-                    user.setUsername(finalResult.getString("username"));
-                    user.setEmail(finalResult.getString("email"));
-                    user.setCategoria(finalResult.getString("categoria"));
-                    user.setCategoria_user(finalResult.getString("categoria_user"));
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
-                }
-            } catch (MalformedURLException e) {
-                Log.e("connection_error_url", e.getMessage());
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
-                Log.e("connection_error_io", e.getMessage());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    private class Index_Mobile extends AsyncTask<Void,Void,Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("token", token);
-                json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/index_mobile");
+                json.put("token", user.getToken());
+                json.put("id", user.getID());
+                URL url = new URL("http://192.168.0.104:8000/get_categorias");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -299,23 +274,88 @@ public class index extends AppCompatActivity implements Actions {
                     JSONArray finalResult = new JSONArray(tokener);
                     Log.e("result", finalResult.toString());
                     for(int i = 0; i < finalResult.length() ; i++){
-                        Demandas demanda = new Demandas();
-                        demanda.setId(finalResult.getJSONObject(i).getInt("id"));
-                        demanda.setTitulo(finalResult.getJSONObject(i).getString("titulo"));
-                        demanda.setCategoria(finalResult.getJSONObject(i).getInt("categoria"));
-                        demanda.setDescricao(finalResult.getJSONObject(i).getString("descricao"));
-                        demanda.setUser_demanda(finalResult.getJSONObject(i).getInt("user_demanda"));
-                        demanda.setData(finalResult.getJSONObject(i).getString("data"));
-                        listademandas.add(demanda);
-                        Log.e("titulo: ", demanda.getTitulo());
-                        Log.e("categoria: ", String.valueOf(demanda.getCategoria()));
-                        Log.e("descricao: ", demanda.getDescricao());
+                        Categoria categoria = new Categoria();
+                        categoria.setId(finalResult.getJSONObject(i).getInt("id"));
+                        categoria.setCategoria(finalResult.getJSONObject(i).getString("categoria"));
+                        listacategorias.add(categoria);
+                        Log.e("titulo: ", categoria.getCategoria());
+
                     }
+                    setRecyclerView();
                 }
             } catch (ProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private class Request_User extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(index.this, R.style.styleProgressDialog);
+            dialog.setTitle("Carregando");
+            dialog.setMessage("Verificando o usuario...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            dialog.dismiss();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("token", user.getToken());
+                json.put("id", user.getID());
+                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                writer.write(json.toString());
+                writer.flush();
+                writer.close();
+                outputStream.close();
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line = null;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder builder = new StringBuilder();
+                    for (line = null; (line = br.readLine()) != null; ) {
+                        builder.append(line).append("\n");
+                    }
+                    JSONTokener tokener = new JSONTokener(builder.toString());
+                    JSONObject finalResult = new JSONObject(tokener);
+                    Log.e("222222", finalResult.toString());
+                    user.setToken(finalResult.getString("token"));
+                    user.setFirst_name(finalResult.getString("first_name"));
+                    user.setLast_name(finalResult.getString("last_name"));
+                    user.setUsername(finalResult.getString("username"));
+                    user.setEmail(finalResult.getString("email"));
+                    user.setCategoria_user(finalResult.getString("categoria"));
+
+                    Log.e("CATEGORIA", user.getCategoria_user());
+
+                }
+            } catch (MalformedURLException e) {
+                Log.e("connection_error_url", e.getMessage());
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
+                Log.e("connection_error_io", e.getMessage());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

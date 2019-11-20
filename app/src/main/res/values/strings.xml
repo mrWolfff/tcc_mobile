@@ -28,4 +28,8 @@
     <string name="title_activity_servicos">servicos</string>
     <string name="title_activity_cadastro_user">cadastro_user</string>
     <string name="title_activity_edit_demanda">edit_demanda</string>
+    <string name="title_activity_index_prestador">index_prestador</string>
+    <string name="title_activity_categoria_atual">categoria_atual</string>
+    <string name="title_activity_user_detail">user_detail</string>
+    <string name="title_activity_signup">signup</string>
 </resources>

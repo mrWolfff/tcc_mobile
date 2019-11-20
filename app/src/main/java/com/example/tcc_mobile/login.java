@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tcc_mobile.classes.User;
-import com.example.tcc_mobile.views.cadastro_user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,17 +48,17 @@ public class login extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //   VERIFICAR SE USUARIO ESTA SALVO NO SHARED PREFERENCES
-        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
-        token = prefs.getString("token", "No name defined");
-        id = prefs.getInt("id", 0);
-        new login.Request_User().execute();
+        //prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+        //token = prefs.getString("token", "No name defined");
+        //id = prefs.getInt("id", 0);
+        //new login.Request_User().execute();
 
 
 
     }
 
     public void register_user(View view) {
-        Intent intent = new Intent(login.this, cadastro_user.class);
+        Intent intent = new Intent(login.this, signup.class);
         startActivity(intent);
     }
 
@@ -203,12 +202,11 @@ public class login extends AppCompatActivity {
                                 user.setEmail(finalResult.getString("email"));
                                 //user.setCategoria(finalResult.getString("categoria"));
                                 user.setCategoria_user(finalResult.getString("categoria_user"));
-                                SharedPreferences.Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
-                                editor.putString("token", user.getToken());
-                                editor.putInt("id", user.getID());
-                                editor.apply();
-                                Intent intent = new Intent(getApplicationContext(), index.class);
-                                intent.putExtra("user", user);
+
+                                Intent intent = new Intent(login.this, index.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("user", user);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
 
                             }

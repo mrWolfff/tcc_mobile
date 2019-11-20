@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <TextView
-        android:id="@+id/texto_titulo"
+        android:id="@+id/titulo_servicos_ativo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Categorias"
-        android:textSize="30sp"
+        android:text="Serviços Ativos"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="30dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/index_recyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/texto_titulo"
+        android:id="@+id/servicos_ativos_recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_servicos_ativo"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content">

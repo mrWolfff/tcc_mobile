@@ -1,6 +1,8 @@
 package com.example.tcc_mobile.views;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -40,6 +42,8 @@ public class edit_demanda extends AppCompatActivity {
     SharedPreferences prefs;
     String token;
     int id;
+    String titulo_string;
+    String descricao_string;
 
 
     @Override
@@ -73,6 +77,7 @@ public class edit_demanda extends AppCompatActivity {
             categoria_edit.setText(String.valueOf(demanda.getCategoria()));
             descricao_edit.setText(demanda.getDescricao());
             user_edit.setText(String.valueOf(demanda.getUser_demanda()));
+
         } catch (Exception e) {
             Log.e("atributos: ", e.getMessage());
         }
@@ -81,10 +86,35 @@ public class edit_demanda extends AppCompatActivity {
 
 
     public void on_button_delete(View view) {
-        new Delete_Demanda().execute();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(edit_demanda.this);
+                alert.setTitle("Deletar!");
+                alert.setMessage("Voce tem certeza que quer deletar a demanda?");
+
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        new Delete_Demanda().execute();
+                    }
+                });
+                alert.setNegativeButton("Não",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+
+                alert.show();
+            }
+        });
+
     }
 
     public void on_button_ok(View view) {
+        titulo_string = titulo_edit.getText().toString();
+        descricao_string = descricao_edit.getText().toString();
         new Editar_Demanda().execute();
     }
 
@@ -111,6 +141,8 @@ public class edit_demanda extends AppCompatActivity {
                 json.put("id", id);
                 json.put("token", token);
                 json.put("id_demanda", String.valueOf(demanda.getId()));
+                json.put("titulo", titulo_string);
+                json.put("descricao", descricao_string);
 
                 URL url = new URL("http://192.168.0.104:8000/edit_demanda");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();

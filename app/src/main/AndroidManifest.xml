@@ -12,12 +12,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".views.edit_demanda"
-            android:label="@string/title_activity_edit_demanda"
+            android:name=".signup"
+            android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".views.cadastro_user"
-            android:label="@string/title_activity_cadastro_user"
+            android:name=".views.user_detail"
+            android:label="@string/title_activity_user_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.categoria_atual"
+            android:label="@string/title_activity_categoria_atual"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".index_prestador"
+            android:label="@string/title_activity_index_prestador"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.edit_demanda"
+            android:label="@string/title_activity_edit_demanda"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.servicos"

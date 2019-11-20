@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"/>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -19,21 +19,45 @@
             android:background="@color/cor_app"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:layout_height="wrap_content"
+        android:id="@+id/tabLayout_servicos"
+        android:background="@color/cor_app"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/white"
+        android:layout_width="match_parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:text="Ativos"
+            android:id="@+id/ativos"
+            android:layout_gravity="top"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:text="Cancelados"
+            android:id="@+id/cancelados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.google.android.material.tabs.TabItem
+            android:text="Concluídos"
+            android:id="@+id/concluidos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:id="@+id/viewPager_servicos"
+        android:layout_height="match_parent">
+
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            app:tabGravity="fill"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="scrollable"
-            app:tabTextColor="@android:color/white"
-            android:background="@color/cor_app" />
+             />
 
-
-    </com.google.android.material.appbar.AppBarLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    </androidx.viewpager.widget.ViewPager>
 
     <include layout="@layout/content_servicos" />
 

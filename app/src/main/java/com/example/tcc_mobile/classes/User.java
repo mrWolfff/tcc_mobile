@@ -17,7 +17,7 @@ public class User implements Parcelable {
     private String endereço;
     private String cidade;
     private String estado;
-    private String categoria;
+    private int categoria;
     private String categoria_user;
 
     public User(){
@@ -25,7 +25,7 @@ public class User implements Parcelable {
 
     }
 
-    public User(int id, String first_name, String last_name, String username, String email, String categoria, String categoria_user){
+    public User(int id, String first_name, String last_name, String username, String email, int categoria, String categoria_user){
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -33,7 +33,7 @@ public class User implements Parcelable {
         this.categoria = categoria;
         this.categoria_user = categoria_user;
     }
-    public User(int id, String first_name, String last_name, String email, String cpf_cnpj, String sexo, String telefone, String celular, String endereço, String cidade, String estado, String categoria, String categoria_user) {
+    public User(int id, String first_name, String last_name, String email, String cpf_cnpj, String sexo, String telefone, String celular, String endereco, String cidade, String estado, int categoria, String categoria_user) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -145,11 +145,11 @@ public class User implements Parcelable {
         this.estado = estado;
     }
 
-    public String getCategoria() {
+    public int getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(int categoria) {
         this.categoria = categoria;
     }
 
@@ -173,6 +173,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
+        dest.writeString(this.token);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
         dest.writeString(this.username);
@@ -182,6 +183,7 @@ public class User implements Parcelable {
 
     public void readFromParcel(Parcel parcel){
         this.id = parcel.readInt();
+        this.token = parcel.readString();
         this.first_name = parcel.readString();
         this.last_name = parcel.readString();
         this.username = parcel.readString();
