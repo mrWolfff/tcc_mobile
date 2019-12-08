@@ -144,7 +144,7 @@ public class edit_demanda extends AppCompatActivity {
                 json.put("titulo", titulo_string);
                 json.put("descricao", descricao_string);
 
-                URL url = new URL("http://192.168.0.104:8000/edit_demanda");
+                URL url = new URL("http://192.168.0.105:8000/edit_demanda");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -217,7 +217,7 @@ public class edit_demanda extends AppCompatActivity {
                 json.put("token", token);
                 json.put("id_demanda", String.valueOf(demanda.getId()));
 
-                URL url = new URL("http://192.168.0.104:8000/delete_demanda");
+                URL url = new URL("http://192.168.0.108:8000/delete_demanda");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

@@ -68,7 +68,7 @@ public class categoria_atual extends AppCompatActivity implements Actions {
         String text = "Usuarios da categoria: "+ categoria.getCategoria();
         title_categoria.setText(text);
         new Get_User_Categoria().execute();
-        setRecyclerView();
+
 
     }
 
@@ -103,6 +103,13 @@ public class categoria_atual extends AppCompatActivity implements Actions {
     }
 
     private class Get_User_Categoria extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setRecyclerView();
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
             JSONObject json = new JSONObject();
@@ -110,7 +117,7 @@ public class categoria_atual extends AppCompatActivity implements Actions {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("categoria", categoria.getCategoria());
-                URL url = new URL("http://192.168.0.104:8000/get_user_categoria");
+                URL url = new URL("http://192.168.0.108:8000/get_user_categoria");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

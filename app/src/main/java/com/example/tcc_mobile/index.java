@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -90,10 +89,10 @@ public class index extends AppCompatActivity implements Actions {
                 .setDrawerLayout(drawer)
                 .build();
         //  ------ SHARED PREFERENCES -----
-        //prefs = getSharedPreferences("user_info", MODE_PRIVATE);
-        //token = prefs.getString("token", "No name defined");
-        //id = prefs.getInt("id", 0);
-        //Log.e("token ", token + " ID " + id);
+        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+        token = prefs.getString("token", "No name defined");
+        id = prefs.getInt("id", 0);
+        Log.e("token ", token + " ID " + id);
 
         //
 
@@ -141,26 +140,10 @@ public class index extends AppCompatActivity implements Actions {
         name = nav.findViewById(R.id.nav_name);
         email = nav.findViewById(R.id.nav_email);
 
-        Bundle bundle = getIntent().getExtras();
-        try{
-            user = bundle.getParcelable("user");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
-        editor.putString("token", user.getToken());
-        editor.putInt("id", user.getID());
-        editor.apply();
-        boolean one = false;
-        Log.e("name", String.valueOf(name == null));
-        Log.e("email", String.valueOf(email == null));
-        name.setText(user.get_full_name());
-        email.setText(user.getEmail());
-        if(user.getCategoria_user().equals("Prestador"))
-            startActivity(new Intent(index.this, index_prestador.class));
+
 
         new Request_User().execute();
-        new Get_Categorias().execute();
+
 
 
     }
@@ -206,6 +189,8 @@ public class index extends AppCompatActivity implements Actions {
 
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+                        editor = prefs.edit();
                         editor.clear();
                         editor.apply();
                         Intent intent = new Intent(index.this, login.class);
@@ -242,13 +227,21 @@ public class index extends AppCompatActivity implements Actions {
     }
 
     private class Get_Categorias extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setRecyclerView();
+
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
             JSONObject json = new JSONObject();
             try {
-                json.put("token", user.getToken());
-                json.put("id", user.getID());
-                URL url = new URL("http://192.168.0.104:8000/get_categorias");
+                json.put("token", token);
+                json.put("id", id);
+                URL url = new URL("http://192.168.0.108:8000/get_categorias");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -281,7 +274,7 @@ public class index extends AppCompatActivity implements Actions {
                         Log.e("titulo: ", categoria.getCategoria());
 
                     }
-                    setRecyclerView();
+
                 }
             } catch (ProtocolException e) {
                 e.printStackTrace();
@@ -295,28 +288,23 @@ public class index extends AppCompatActivity implements Actions {
     }
 
     private class Request_User extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(index.this, R.style.styleProgressDialog);
-            dialog.setTitle("Carregando");
-            dialog.setMessage("Verificando o usuario...");
-            dialog.show();
-        }
+
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
+            //Log.e("USER PEGOU", user.getEmail());
+
+            new Get_Categorias().execute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             JSONObject json = new JSONObject();
             try {
-                json.put("token", user.getToken());
-                json.put("id", user.getID());
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                json.put("token", token);
+                json.put("id", id);
+                URL url = new URL("http://192.168.0.108:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -341,20 +329,22 @@ public class index extends AppCompatActivity implements Actions {
                     JSONTokener tokener = new JSONTokener(builder.toString());
                     JSONObject finalResult = new JSONObject(tokener);
                     Log.e("222222", finalResult.toString());
-                    user.setToken(finalResult.getString("token"));
+                    //user.setToken(finalResult.getString("token"));
                     user.setFirst_name(finalResult.getString("first_name"));
                     user.setLast_name(finalResult.getString("last_name"));
                     user.setUsername(finalResult.getString("username"));
                     user.setEmail(finalResult.getString("email"));
                     user.setCategoria_user(finalResult.getString("categoria"));
 
+
                     Log.e("CATEGORIA", user.getCategoria_user());
+
+
 
                 }
             } catch (MalformedURLException e) {
                 Log.e("connection_error_url", e.getMessage());
             } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
                 Log.e("connection_error_io", e.getMessage());
             } catch (JSONException e) {
                 e.printStackTrace();

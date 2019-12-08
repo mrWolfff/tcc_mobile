@@ -104,7 +104,7 @@ public class index_prestador extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                URL url = new URL("http://192.168.0.108:8000/index_mobile");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -162,7 +162,7 @@ public class index_prestador extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                URL url = new URL("http://192.168.0.108:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

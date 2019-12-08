@@ -108,7 +108,7 @@ public class demandas extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/get_demandas");
+                URL url = new URL("http://192.168.0.108:8000/get_demandas");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -181,7 +181,7 @@ public class demandas extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                URL url = new URL("http://192.168.0.108:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -209,14 +209,12 @@ public class demandas extends AppCompatActivity implements Actions {
                     user.setLast_name(finalResult.getString("last_name"));
                     user.setUsername(finalResult.getString("username"));
                     user.setEmail(finalResult.getString("email"));
-                    user.setCategoria_user(finalResult.getString("categoria_user"));
+                    //user.setCategoria_user(finalResult.getString("categoria_user"));
 
                     editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
                     editor.putString("token", user.getToken());
                     editor.putInt("id", user.getID());
                     editor.apply();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
                 }
             } catch (MalformedURLException e) {
                 Log.e("connection_error_url", e.getMessage());

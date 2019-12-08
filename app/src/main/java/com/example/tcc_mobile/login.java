@@ -48,10 +48,11 @@ public class login extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //   VERIFICAR SE USUARIO ESTA SALVO NO SHARED PREFERENCES
-        //prefs = getSharedPreferences("user_info", MODE_PRIVATE);
-        //token = prefs.getString("token", "No name defined");
-        //id = prefs.getInt("id", 0);
-        //new login.Request_User().execute();
+        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+        token = prefs.getString("token", "No name defined");
+        id = prefs.getInt("id", 0);
+        if(id != 0)
+            new login.Request_User().execute();
 
 
 
@@ -100,7 +101,7 @@ public class login extends AppCompatActivity {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.104:8000/api/get_info");
+                URL url = new URL("http://192.168.0.108:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -116,8 +117,23 @@ public class login extends AppCompatActivity {
                 connection.connect();
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    Intent intent = new Intent(login.this, index.class);
-                    startActivity(intent);
+                    String line = null;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder builder = new StringBuilder();
+                    for (line = null; (line = br.readLine()) != null; ) {
+                        builder.append(line).append("\n");
+                    }
+                    JSONTokener tokener = new JSONTokener(builder.toString());
+                    JSONObject finalResult = new JSONObject(tokener);
+                    Log.e("aaaaaaaaaa", finalResult.toString());
+                    if (finalResult.getString("categoria").equals( "Consumidor")){
+                        Intent intent = new Intent(login.this, index.class);
+                        startActivity(intent);
+                    }else{
+                        startActivity(new Intent(login.this, index_prestador.class));
+                    }
+
+
                 }
             } catch (MalformedURLException e) {
                 Log.e("connection_error_url", e.getMessage());
@@ -154,7 +170,7 @@ public class login extends AppCompatActivity {
                 json.put("username", user);
                 json.put("password", pass);
 
-                URL url = new URL("http://192.168.0.104:8000/api/login");
+                URL url = new URL("http://10.153.15.86:8000/api/login");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 //String userpass = username + ":" + password;
                 //String autorizacao = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
@@ -200,15 +216,19 @@ public class login extends AppCompatActivity {
                                 user.setLast_name(finalResult.getString("last_name"));
                                 user.setUsername(finalResult.getString("username"));
                                 user.setEmail(finalResult.getString("email"));
-                                //user.setCategoria(finalResult.getString("categoria"));
+                                //user.setCategoria(finalResult.getString("categoria"))
                                 user.setCategoria_user(finalResult.getString("categoria_user"));
-
-                                Intent intent = new Intent(login.this, index.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelable("user", user);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-
+                                Log.e("CATEGORIA", finalResult.getString("categoria_user"));
+                                editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
+                                editor.putString("token", user.getToken());
+                                editor.putInt("id", user.getID());
+                                editor.apply();
+                                if (finalResult.getString("categoria_user").equals("Consumidor")){
+                                    Intent intent = new Intent(login.this, index.class);
+                                    startActivity(intent);
+                                }else{
+                                    startActivity(new Intent(login.this, index_prestador.class));
+                                }
                             }
 
             } catch (IOException e) {

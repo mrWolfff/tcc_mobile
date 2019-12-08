@@ -104,7 +104,7 @@ public class create_demanda extends AppCompatActivity {
                 json.put("descricao", descricao);
                 json.put("categoria", categoria);
 
-                URL url = new URL("http://192.168.0.104:8000/create_demanda");
+                URL url = new URL("http://192.168.0.108:8000/create_demanda");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
