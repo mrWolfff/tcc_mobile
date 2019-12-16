@@ -6,11 +6,6 @@
         android:orderInCategory="100"
         android:onClick="perfil_user"
         app:showAsAction="never" />
-    <item android:id="@+id/config"
-        android:title="Configurações"
-        android:orderInCategory="100"
-        android:onClick="configuration_user"
-        app:showAsAction="never" />
     <item android:id="@+id/logout"
         android:title="Sair"
         android:orderInCategory="100"

@@ -3,6 +3,7 @@ package com.example.tcc_mobile.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,8 +44,9 @@ public class Message_Session_Adapter extends RecyclerView.Adapter{
         @Override
         public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
             Message_SessionViewHolder holder = (Message_SessionViewHolder) viewHolder;
-            holder.from_user.setText(String.valueOf(lista_message_session.get(i).getFrom_user()));
-            holder.to_user.setText(String.valueOf(lista_message_session.get(i).getTo_user()));
+            holder.from_user.setText(String.valueOf(lista_message_session.get(i).getFrom_user_string()));
+            holder.to_user.setText(String.valueOf(lista_message_session.get(i).getTo_user_string()));
+            holder.imageView.setImageBitmap(lista_message_session.get(i).getImagem());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,12 +93,14 @@ public class Message_Session_Adapter extends RecyclerView.Adapter{
 
             TextView from_user;
             TextView to_user;
+            ImageView imageView;
 
             public Message_SessionViewHolder(@NonNull View itemView) {
                 super(itemView);
                 itemView.setTag(this);
                 from_user = itemView.findViewById(R.id.from_user_text);
-                to_user = itemView.findViewById(R.id.to_user_text);
+                to_user = itemView.findViewById(R.id.to_user_text_categoria);
+                imageView = itemView.findViewById(R.id.imagem_user);
 
             }
         }

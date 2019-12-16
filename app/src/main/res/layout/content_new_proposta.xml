@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".views.new_proposta"
+    tools:showIn="@layout/activity_new_proposta">
+
+    <TextView
+        android:id="@+id/texto_proposta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Crie uma proposta para o consumidor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/valor_proposta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:inputType="number"
+        android:layout_marginTop="30dp"
+        android:hint="Valor da Proposta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/texto_proposta" />
+
+    <Button
+        android:id="@+id/data_inicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        android:inputType="date"
+        android:text="DEFINIR"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="date_picker_inicio"
+        app:layout_constraintTop_toBottomOf="@+id/valor_proposta" />
+
+    <Button
+        android:id="@+id/data_fim_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        android:text="DEFINIR"
+        android:inputType="date"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="date_picker_fim"
+        app:layout_constraintTop_toBottomOf="@+id/data_inicio" />
+
+    <Spinner
+        android:id="@+id/spinner_proposta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/data_fim" />
+
+    <EditText
+        android:id="@+id/descricao_proposta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:hint="Descriçao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_proposta" />
+
+    <Button
+        android:id="@+id/botao_proposta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pronto"
+        android:onClick="send_proposta"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        android:background="@color/cor_app"
+        android:elevation="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/descricao_proposta" />
+
+    <EditText
+        android:id="@+id/data_inicio_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="150dp"
+        android:layout_marginTop="30dp"
+        android:hint="Data inicial"
+        android:inputType="date"
+        app:layout_constraintEnd_toStartOf="@+id/data_inicio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/valor_proposta" />
+
+    <EditText
+        android:id="@+id/data_fim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="Data final"
+        android:inputType="date"
+        android:minWidth="150dp"
+        app:layout_constraintEnd_toStartOf="@+id/data_fim_picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/data_inicio" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

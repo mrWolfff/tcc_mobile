@@ -1,5 +1,6 @@
 package com.example.tcc_mobile.classes;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,9 +8,35 @@ public class Message_Session implements Parcelable {
     private int id;
     private int from_user;
     private int to_user;
-
+    private Bitmap imagem;
+    private String from_user_string;
+    private String to_user_string;
     public Message_Session(){
 
+    }
+
+    public Bitmap getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Bitmap imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getFrom_user_string() {
+        return from_user_string;
+    }
+
+    public void setFrom_user_string(String from_user_string) {
+        this.from_user_string = from_user_string;
+    }
+
+    public String getTo_user_string() {
+        return to_user_string;
+    }
+
+    public void setTo_user_string(String to_user_string) {
+        this.to_user_string = to_user_string;
     }
 
     public int getId() {

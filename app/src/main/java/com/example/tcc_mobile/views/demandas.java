@@ -63,9 +63,8 @@ public class demandas extends AppCompatActivity implements Actions {
         token = prefs.getString("token", "No name defined");
         id = prefs.getInt("id", 0);
         Log.e("token ", token + " ID " + id);
-        new demandas.Request_User().execute();
-        new demandas.Get_Demandas().execute();
-        setRecyclerView();
+        new Request_User().execute();
+
 
     }
 
@@ -103,12 +102,20 @@ public class demandas extends AppCompatActivity implements Actions {
     private class Get_Demandas extends AsyncTask<Void,Void,Void>{
 
         @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //new demandas.Get_Demandas().execute();
+
+            setRecyclerView();
+        }
+
+        @Override
         protected Void doInBackground(Void... voids) {
             JSONObject json = new JSONObject();
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/get_demandas");
+                URL url = new URL("http://192.168.0.105:8000/get_demandas");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -137,9 +144,9 @@ public class demandas extends AppCompatActivity implements Actions {
                         Demandas demanda = new Demandas();
                         demanda.setId(finalResult.getJSONObject(i).getInt("id"));
                         demanda.setTitulo(finalResult.getJSONObject(i).getString("titulo"));
-                        demanda.setCategoria(finalResult.getJSONObject(i).getInt("categoria"));
+                        demanda.setCategoria_string(finalResult.getJSONObject(i).getString("categoria"));
                         demanda.setDescricao(finalResult.getJSONObject(i).getString("descricao"));
-                        demanda.setUser_demanda(finalResult.getJSONObject(i).getInt("user_demanda"));
+                        demanda.setUser_demanda_string(finalResult.getJSONObject(i).getString("user_demanda"));
                         demanda.setData(finalResult.getJSONObject(i).getString("data"));
                         listademandas.add(demanda);
                         Log.e("titulo: ", demanda.getTitulo());
@@ -159,19 +166,11 @@ public class demandas extends AppCompatActivity implements Actions {
     }
 
     private class Request_User extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(demandas.this, R.style.styleProgressDialog);
-            dialog.setTitle("Carregando");
-            dialog.setMessage("Verificando o usuario...");
-            dialog.show();
-        }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
+            new demandas.Get_Demandas().execute();
 
         }
 
@@ -181,7 +180,7 @@ public class demandas extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/api/get_info");
+                URL url = new URL("http://192.168.0.105:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -210,11 +209,6 @@ public class demandas extends AppCompatActivity implements Actions {
                     user.setUsername(finalResult.getString("username"));
                     user.setEmail(finalResult.getString("email"));
                     //user.setCategoria_user(finalResult.getString("categoria_user"));
-
-                    editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
-                    editor.putString("token", user.getToken());
-                    editor.putInt("id", user.getID());
-                    editor.apply();
                 }
             } catch (MalformedURLException e) {
                 Log.e("connection_error_url", e.getMessage());

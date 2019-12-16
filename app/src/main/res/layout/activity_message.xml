@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:clipToPadding="false"
-    android:focusableInTouchMode="true"
     tools:context=".views.message">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-    </com.google.android.material.appbar.AppBarLayout>
-
+        android:layout_height="?attr/actionBarSize">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_message"
+        android:background="@color/cor_app"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/cor_app"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="Chat" />
+        android:elevation="5dp"
+        app:title="joao"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp">
+
+        </ImageView>
+    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
 
-    <include layout="@layout/content_message"></include>
+    <include
+        layout="@layout/content_message"
+></include>
 
 
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

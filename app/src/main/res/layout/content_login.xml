@@ -12,31 +12,34 @@
         android:id="@+id/text_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Insira suas credencias para entrar!"
+        android:text="Insira suas credencias para acessar!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:layout_marginTop="50dp"/>
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:hint="E-mail ou nome de usuário"
+        android:minWidth="250dp"
+        android:hint="Nome de usuário"
         app:backgroundTint="@color/cor_app"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_login" />
 
+
     <EditText
         android:id="@+id/pass"
-        android:layout_width="215dp"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginTop="30dp"
-        android:hint="Sua senha"
+        android:layout_marginTop="40dp"
+        android:hint="Senha"
+        android:minWidth="250dp"
         app:backgroundTint="@color/cor_app"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,12 +66,13 @@
         android:text="Registrar-se"
         android:layout_marginRight="55dp"
         android:onClick="register_user"
-        style="@android:"
         android:background="@color/cor_app"
         android:textColor="@color/white"
         android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pass" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -118,7 +118,7 @@ public class user_detail extends AppCompatActivity {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/api/get_info");
+                URL url = new URL("http://192.168.0.105:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

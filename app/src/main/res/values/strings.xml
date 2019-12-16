@@ -33,4 +33,11 @@
     <string name="title_activity_user_detail">user_detail</string>
     <string name="title_activity_signup">signup</string>
     <string name="title_activity_message">message</string>
+    <string name="title_activity_new_proposta">new_proposta</string>
+    <string name="title_activity_servico_atual">servico_atual</string>
+    <string name="title_activity_propostas">propostas</string>
+    <string name="title_activity_proposta_detail">proposta_detail</string>
+    <string name="title_activity_concluir_servico">concluir_servico</string>
+    <string name="title_activity_cancelar_servico">cancelar_servico</string>
+    <string name="title_activity_demanda_atual">demanda_atual</string>
 </resources>

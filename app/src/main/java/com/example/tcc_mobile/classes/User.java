@@ -1,10 +1,12 @@
 package com.example.tcc_mobile.classes;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
     private int id;
+    private Bitmap imagem;
     private String token;
     private String first_name;
     private String last_name;
@@ -19,6 +21,18 @@ public class User implements Parcelable {
     private String estado;
     private int categoria;
     private String categoria_user;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
 
     public User(){
 
@@ -47,6 +61,14 @@ public class User implements Parcelable {
         this.estado = estado;
         this.categoria = categoria;
         this.categoria_user = categoria_user;
+    }
+
+    public Bitmap getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Bitmap imagem) {
+        this.imagem = imagem;
     }
 
     public void setToken(String token){
@@ -173,6 +195,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
+        dest.writeValue(this.imagem);
         dest.writeString(this.token);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
@@ -183,6 +206,7 @@ public class User implements Parcelable {
 
     public void readFromParcel(Parcel parcel){
         this.id = parcel.readInt();
+        this.imagem = (Bitmap) parcel.readValue(Bitmap.class.getClassLoader());
         this.token = parcel.readString();
         this.first_name = parcel.readString();
         this.last_name = parcel.readString();

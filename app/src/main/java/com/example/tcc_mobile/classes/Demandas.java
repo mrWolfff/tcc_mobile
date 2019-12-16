@@ -7,11 +7,31 @@ import com.google.gson.annotations.SerializedName;
 
 public class Demandas implements Parcelable {
     private int id;
+    private String imagem;
     private String titulo;
     private String descricao;
     private String data;
     private int user_demanda;
     private int categoria;
+
+    private String categoria_string;
+    private String user_demanda_string;
+
+    public String getUser_demanda_string() {
+        return user_demanda_string;
+    }
+
+    public void setUser_demanda_string(String user_demanda_string) {
+        this.user_demanda_string = user_demanda_string;
+    }
+
+    public String getCategoria_string() {
+        return categoria_string;
+    }
+
+    public void setCategoria_string(String categoria_string) {
+        this.categoria_string = categoria_string;
+    }
 
     @SerializedName("body")
     private String text;
@@ -30,6 +50,13 @@ public class Demandas implements Parcelable {
     }
 
 
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 
     public int getId(){
         return id;

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="top_nav" type="id" />
+    <item name="texto_proposta" type="id" />
+    <item name="spinner_proposta" type="id" />
+    <item name="valor_proposta" type="id" />
+    <item name="data_inicio" type="id" />
+    <item name="data_fim" type="id" />
+    <item name="descricao_proposta" type="id" />
+    <item name="data_inicio_text" type="id" />
+    <item name="data_fim_picker" type="id" />
 </resources>

@@ -117,7 +117,7 @@ public class categoria_atual extends AppCompatActivity implements Actions {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("categoria", categoria.getCategoria());
-                URL url = new URL("http://192.168.0.108:8000/get_user_categoria");
+                URL url = new URL("http://192.168.0.105:8000/get_user_categoria");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -147,7 +147,7 @@ public class categoria_atual extends AppCompatActivity implements Actions {
                         user.setFirst_name(finalResult.getJSONObject(i).getString("first_name"));
                         user.setLast_name(finalResult.getJSONObject(i).getString("last_name"));
                         user.setUsername(finalResult.getJSONObject(i).getString("username"));
-                        user.setCategoria(finalResult.getJSONObject(i).getInt("categoria_servico"));
+                        user.setCategoria_user(finalResult.getJSONObject(i).getString("categoria_servico"));
                         listausers.add(user);
                         Log.e("nome: ", user.get_full_name());
                         Log.e("categoria: ", String.valueOf(user.getCategoria()));

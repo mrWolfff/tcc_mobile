@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/profile_prestador"
+        android:title="Meu Perfil"
+        android:orderInCategory="100"
+        android:onClick="perfil_user"
+        app:showAsAction="never" />
+    <item android:id="@+id/config_prestador"
+        android:title="Configurações"
+        android:orderInCategory="100"
+        android:onClick="configuration_user"
+        app:showAsAction="never" />
+    <item android:id="@+id/logout_prestador"
+        android:title="Sair"
+        android:orderInCategory="100"
+        android:onClick="logout_prestador"
+        app:showAsAction="never" />
+</menu>

@@ -60,14 +60,6 @@ public class box_message extends AppCompatActivity implements Actions {
 
 
 
-
-
-
-
-
-
-
-
         prefs = getSharedPreferences("user_info", MODE_PRIVATE);
         token = prefs.getString("token", "No name defined");
         id = prefs.getInt("id", 0);
@@ -123,7 +115,7 @@ public class box_message extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/get_message_session");
+                URL url = new URL("http://192.168.0.105:8000/get_message_session");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

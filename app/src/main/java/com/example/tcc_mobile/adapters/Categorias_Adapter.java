@@ -3,6 +3,7 @@ package com.example.tcc_mobile.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ public class Categorias_Adapter extends RecyclerView.Adapter{
         @Override
         public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
             CategoriaViewHolder holder = (CategoriaViewHolder) viewHolder;
+            holder.imagem_text.setImageBitmap(lista_categorias.get(i).getImagem());
             holder.categoria_text.setText(lista_categorias.get(i).getCategoria());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,10 +91,12 @@ public class Categorias_Adapter extends RecyclerView.Adapter{
         public static class CategoriaViewHolder extends RecyclerView.ViewHolder {
 
             TextView categoria_text;
+            ImageView imagem_text;
 
             public CategoriaViewHolder(@NonNull View itemView) {
                 super(itemView);
                 itemView.setTag(this);
+                imagem_text = itemView.findViewById(R.id.imagem_categoria);
                 categoria_text = itemView.findViewById(R.id.categoria_name);
 
             }

@@ -8,20 +8,24 @@
     tools:context=".signup"
     tools:showIn="@layout/activity_signup">
 
+
     <TextView
         android:id="@+id/text_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cadastro de um novo usuário"
         android:textSize="20sp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="Primeiro Nome"
@@ -33,7 +37,10 @@
 
     <EditText
         android:id="@+id/editText2"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:hint="Sobrenome"
         android:inputType="textPersonName"
@@ -45,7 +52,10 @@
 
     <EditText
         android:id="@+id/editText3"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:hint="Nome de Usuário"
         android:inputType="textPersonName"
@@ -57,7 +67,10 @@
 
     <EditText
         android:id="@+id/editText4"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:hint="E-mail"
         android:backgroundTint="@color/cor_app"
@@ -69,7 +82,10 @@
 
     <EditText
         android:id="@+id/editText5"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:hint="Senha"
         android:backgroundTint="@color/cor_app"
@@ -81,7 +97,10 @@
 
     <EditText
         android:id="@+id/editText6"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         android:hint="Confirmação de Senha"
         android:inputType="textPassword"
@@ -90,6 +109,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText5" />
+
+
 
     <Button
         android:id="@+id/button3"
@@ -101,5 +122,17 @@
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText6" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_signup" />
+
+    <Spinner
+        android:id="@+id/spinner_signup"
+        android:layout_width="wrap_content"
+        android:minHeight="40dp"
+        android:minWidth="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText6"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

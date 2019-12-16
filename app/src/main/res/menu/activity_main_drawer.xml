@@ -20,13 +20,13 @@
             android:icon="@drawable/baseline_info_black_18dp"
             android:title="Serviços" />
         <item
+            android:id="@+id/propostas_view"
+            android:icon="@drawable/baseline_info_black_18dp"
+            android:title="Propostas" />
+        <item
             android:id="@+id/box"
             android:icon="@drawable/baseline_chat_black_18dp"
             android:title="Mensagens" />
-        <item
-        android:id="@+id/configuration"
-        android:icon="@drawable/baseline_account_circle_black_18dp"
-        android:title="Configurações" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/baseline_exit_to_app_black_18dp"

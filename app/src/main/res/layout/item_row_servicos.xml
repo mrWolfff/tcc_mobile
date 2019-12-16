@@ -16,25 +16,23 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/titulo_text"
+            android:id="@+id/proposta_servico"
+            android:layout_width="120dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:id="@+id/user_servico"
             android:layout_width="80dp"
             android:layout_height="80dp" />
         <TextView
-            android:id="@+id/categoria_text"
-            android:layout_width="60dp"
+            android:id="@+id/data_servico_text"
+            android:layout_width="100dp"
             android:layout_height="80dp" />
         <TextView
-            android:id="@+id/descricao_text"
-            android:layout_width="60dp"
+            android:id="@+id/status_servico"
+            android:layout_width="80dp"
             android:layout_height="80dp" />
-        <TextView
-            android:id="@+id/user_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
-        <TextView
-            android:id="@+id/data_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

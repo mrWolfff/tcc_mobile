@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import com.example.tcc_mobile.views.box_message;
 import com.example.tcc_mobile.views.categoria_atual;
 import com.example.tcc_mobile.views.create_demanda;
 import com.example.tcc_mobile.views.demandas;
+import com.example.tcc_mobile.views.propostas_consumidor;
 import com.example.tcc_mobile.views.servicos;
 import com.google.android.material.navigation.NavigationView;
 
@@ -44,6 +48,7 @@ import org.json.JSONTokener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -61,6 +66,7 @@ public class index extends AppCompatActivity implements Actions {
     TextView title;
     TextView name;
     TextView email;
+    ImageView imagem;
     String token;
     int id;
     SharedPreferences prefs;
@@ -72,6 +78,7 @@ public class index extends AppCompatActivity implements Actions {
     RecyclerView recyclerView;
     NavigationView navigationView;
     NavController navController;
+    private Bitmap bitmap;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -81,6 +88,8 @@ public class index extends AppCompatActivity implements Actions {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -125,11 +134,15 @@ public class index extends AppCompatActivity implements Actions {
                         intent = new Intent(getApplicationContext(), servicos.class);
                         startActivity(intent);
                         break;
+                    case R.id.propostas_view:
+                        intent = new Intent(getApplicationContext(), propostas_consumidor.class);
+                        startActivity(intent);
+                        break;
                     case R.id.configuration:
 
                         break;
                     case R.id.logout:
-
+                        logout_();
                         break;
                 }
                 return false;
@@ -154,6 +167,14 @@ public class index extends AppCompatActivity implements Actions {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        try {
+            Log.e("oi", user.get_full_name());
+            name.setText(user.get_full_name());
+            email.setText(user.getEmail());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         //ItemTouchHelper touchHelper = new ItemTouchHelper(new TouchHelp(adapter));
         //touchHelper.attachToRecyclerView(recyclerView);
     }
@@ -177,6 +198,36 @@ public class index extends AppCompatActivity implements Actions {
     }
 
     public void configuration_user(MenuItem item) {
+    }
+
+    public void logout_(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(index.this);
+                alert.setTitle("Logout!");
+                alert.setMessage("Voce tem certeza que deseja sair?");
+
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        prefs = getSharedPreferences("user_info", MODE_PRIVATE);
+                        editor = prefs.edit();
+                        editor.clear();
+                        editor.apply();
+                        Intent intent = new Intent(index.this, login.class);
+                        startActivity(intent);
+                    }
+                });
+                alert.setNegativeButton("Não",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+
+                alert.show();
+            }
+        });
     }
 
     public void logout(MenuItem item) {
@@ -241,7 +292,7 @@ public class index extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/get_categorias");
+                URL url = new URL("http://192.168.0.105:8000/get_categorias");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -269,6 +320,8 @@ public class index extends AppCompatActivity implements Actions {
                     for(int i = 0; i < finalResult.length() ; i++){
                         Categoria categoria = new Categoria();
                         categoria.setId(finalResult.getJSONObject(i).getInt("id"));
+                        //categoria.setImagem(getBitmap("https://i2.wp.com/www.mcjb.org.br/wp-content/uploads/2017/05/casa-e-construcao-300x300.jpg"));
+                        categoria.setImagem(getBitmap("http://192.168.0.105:8000"+finalResult.getJSONObject(i).getString("imagem")));
                         categoria.setCategoria(finalResult.getJSONObject(i).getString("categoria"));
                         listacategorias.add(categoria);
                         Log.e("titulo: ", categoria.getCategoria());
@@ -285,6 +338,23 @@ public class index extends AppCompatActivity implements Actions {
             }
             return null;
         }
+    }
+
+    public static Bitmap getBitmap(String reqURL){
+        Bitmap bitmap = null;
+        try{
+            URL url = new URL (reqURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     private class Request_User extends AsyncTask<Void,Void,Void> {
@@ -304,7 +374,7 @@ public class index extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.108:8000/api/get_info");
+                URL url = new URL("http://192.168.0.105:8000/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -335,11 +405,7 @@ public class index extends AppCompatActivity implements Actions {
                     user.setUsername(finalResult.getString("username"));
                     user.setEmail(finalResult.getString("email"));
                     user.setCategoria_user(finalResult.getString("categoria"));
-
-
-                    Log.e("CATEGORIA", user.getCategoria_user());
-
-
+                    user.setImagem(new HttpHandler().getBitmap("http://192.168.0.105:8000"+finalResult.getString("imagem")));
 
                 }
             } catch (MalformedURLException e) {

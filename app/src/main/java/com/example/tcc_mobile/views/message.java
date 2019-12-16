@@ -1,9 +1,13 @@
 package com.example.tcc_mobile.views;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,13 +59,19 @@ public class message extends AppCompatActivity implements Actions {
     Messages_Adapter adapter = new Messages_Adapter(message.this);
     NavController navController;
     int cont_there = 0;
+    boolean status;
+    int message_session_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_message);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         //toolbar.setTitle("Chat com USUARIO TAL");
 
 
@@ -73,15 +83,22 @@ public class message extends AppCompatActivity implements Actions {
         Bundle bundle = getIntent().getExtras();
         message_session = bundle.getParcelable("message_session");
         position = (int) bundle.getSerializable("position");
-        Log.e("from_user", String.valueOf(message_session.getId()));
+        Log.e("sessao ", String.valueOf(message_session.getId()));
 
         message = findViewById(R.id.message);
         sendMessage = findViewById(R.id.send_message);
         message_list = findViewById(R.id.messages_view);
+        status = true;
         new Get_Messages().execute();
 
 
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_message, menu);
+        return true;
     }
 
     private void setRecyclerView(){
@@ -115,16 +132,33 @@ public class message extends AppCompatActivity implements Actions {
 
     }
 
+    public void new_proposta(MenuItem item) {
+        status = false;
+        Intent intent = new Intent(this, new_proposta.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("message_session", message_session);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void perfil_user(MenuItem item) {
+    }
+
+    public void logout(MenuItem item) {
+    }
+
     private class Get_Messages extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            new Timer().scheduleAtFixedRate(new TimerTask(){
-                @Override
-                public void run(){
-                    new Get_Messages_Loop().execute();
-                }
-            },0,3000);
+
+                new Timer().scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        new Get_Messages_Loop().execute();
+                    }
+                }, 0, 3000);
+
         }
 
         @Override
@@ -134,7 +168,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("message_session", message_session.getId());
-                URL url = new URL("http://192.168.0.108:8000/get_messages");
+                URL url = new URL("http://192.168.0.105:8000/get_messages");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -213,7 +247,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("id", id);
                 json.put("message", text);
                 json.put("message_session", message_session.getId());
-                URL url = new URL("http://192.168.0.108:8000/send_message");
+                URL url = new URL("http://192.168.0.105:8000/send_message");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -259,7 +293,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("id", id);
                 json.put("message_session", message_session.getId());
                 json.put("cont_there", cont_there);
-                URL url = new URL("http://192.168.0.108:8000/get_messages_loop");
+                URL url = new URL("http://192.168.0.105:8000/get_messages_loop");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

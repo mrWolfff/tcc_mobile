@@ -1,12 +1,13 @@
 package com.example.tcc_mobile.classes;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Categoria implements Parcelable{
     private int id;
     private String categoria;
-    private String imagem;
+    private Bitmap imagem;
 
     public Categoria(){
 
@@ -20,7 +21,7 @@ public class Categoria implements Parcelable{
         return categoria;
     }
 
-    public String getImagem() {
+    public Bitmap getImagem() {
         return imagem;
     }
 
@@ -28,7 +29,7 @@ public class Categoria implements Parcelable{
         this.categoria = categoria;
     }
 
-    public void setImagem(String imagem) {
+    public void setImagem(Bitmap imagem) {
         this.imagem = imagem;
     }
 
@@ -45,13 +46,13 @@ public class Categoria implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.categoria);
-        dest.writeString(this.imagem);
+        //dest.writeValue(this.imagem);
     }
 
     public void readFromParcel(Parcel parcel){
         this.id = parcel.readInt();
         this.categoria = parcel.readString();
-        this.imagem = parcel.readString();
+        //this.imagem = (Bitmap) parcel.readValue(Bitmap.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Categoria> CREATOR = new Parcelable.Creator<Categoria>(){
