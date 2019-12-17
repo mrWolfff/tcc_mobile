@@ -64,7 +64,6 @@ public class categoria_atual extends AppCompatActivity implements Actions {
         title_categoria = findViewById(R.id.title_categoria);
         Bundle bundle = getIntent().getExtras();
         categoria = bundle.getParcelable("categoria");
-        Log.e("categoria", categoria.getCategoria());
         String text = "Usuarios da categoria: "+ categoria.getCategoria();
         title_categoria.setText(text);
         new Get_User_Categoria().execute();
@@ -94,8 +93,10 @@ public class categoria_atual extends AppCompatActivity implements Actions {
 
     @Override
     public void edit(int position) {
+        Log.e("user", String.valueOf(user.getID()));
         Intent intent = new Intent(this, user_detail.class);
         Bundle bundle = new Bundle();
+        bundle.putSerializable("id", user.getID());
         bundle.putParcelable("user", adapter.getLista_users().get(position));
         intent.putExtras(bundle);
         startActivity(intent);
@@ -117,7 +118,7 @@ public class categoria_atual extends AppCompatActivity implements Actions {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("categoria", categoria.getCategoria());
-                URL url = new URL("http://192.168.0.105:8000/get_user_categoria");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_user_categoria");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -144,12 +145,14 @@ public class categoria_atual extends AppCompatActivity implements Actions {
                     Log.e("result", finalResult.toString());
                     for(int i = 0; i < finalResult.length() ; i++){
                         User user = new User();
+
                         user.setFirst_name(finalResult.getJSONObject(i).getString("first_name"));
                         user.setLast_name(finalResult.getJSONObject(i).getString("last_name"));
                         user.setUsername(finalResult.getJSONObject(i).getString("username"));
                         user.setCategoria_user(finalResult.getJSONObject(i).getString("categoria_servico"));
+                        user.setID(finalResult.getJSONObject(i).getInt("id"));
                         listausers.add(user);
-                        Log.e("nome: ", user.get_full_name());
+                        Log.e("nome: ", String.valueOf(user.getID()));
                         Log.e("categoria: ", String.valueOf(user.getCategoria()));
                     }
                 }

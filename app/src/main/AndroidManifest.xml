@@ -3,6 +3,8 @@
     package="com.example.tcc_mobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +15,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".views.enviar_message"
+            android:label="@string/title_activity_enviar_message"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".signup_prestador"
+            android:label="@string/title_activity_signup_prestador"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.perfil"
+            android:label="@string/title_activity_perfil"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".views.demanda_atual"
             android:label="@string/title_activity_demanda_atual"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.cancelar_servico"
             android:label="@string/title_activity_cancelar_servico"

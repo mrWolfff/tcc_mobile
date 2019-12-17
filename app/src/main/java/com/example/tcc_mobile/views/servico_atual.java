@@ -139,7 +139,7 @@ public class servico_atual extends AppCompatActivity {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("id_servico", servico.getId());
-                URL url = new URL("http://192.168.0.105:8000/get_servico_atual");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_servico_atual");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -196,7 +196,7 @@ public class servico_atual extends AppCompatActivity {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("id_proposta", servico.getProposta());
-                URL url = new URL("http://192.168.0.105:8000/get_proposta_atual");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_proposta_atual");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -256,7 +256,7 @@ public class servico_atual extends AppCompatActivity {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("id_demanda", proposta.getDemanda());
-                URL url = new URL("http://192.168.0.105:8000/get_demanda_atual");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_demanda_atual");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

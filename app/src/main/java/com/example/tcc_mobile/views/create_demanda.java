@@ -16,12 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tcc_mobile.R;
+import com.example.tcc_mobile.classes.Categoria;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -44,6 +49,7 @@ public class create_demanda extends AppCompatActivity {
     String titulo;
     String categoria;
     Spinner categoria_spinner;
+    List<Categoria>lista_categoria = new ArrayList<>();
 
 
     @Override
@@ -60,25 +66,92 @@ public class create_demanda extends AppCompatActivity {
         token = prefs.getString("token", "No name defined");
         id = prefs.getInt("id", 0);
         Log.e("token ", token + " ID " + id);
-        try {
-            spinnerArray.add("Diarista/Limpeza");
-            spinnerArray.add("Construção/Civil");
-            categoria_spinner = findViewById(R.id.categoria);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(create_demanda.this, android.R.layout.simple_spinner_item, spinnerArray);
-            categoria_spinner.setAdapter(spinnerAdapter);
-            titulo_text = findViewById(R.id.titulo);
-            descricao_text = findViewById(R.id.descricao);
-            titulo = titulo_text.getText().toString();
-            descricao = descricao_text.getText().toString();
-            categoria = categoria_spinner.getSelectedItem().toString();
-        }catch (Exception e){
-            Log.e("erro", e.getMessage());
-        }
+        titulo_text = findViewById(R.id.titulo);
+        descricao_text = findViewById(R.id.descricao_texto);
+        new Get_Categorias().execute();
+
+    }
+
+    public void setLista(){
+        //spinnerArray.add("Diarista/Limpeza");
+        //spinnerArray.add("Construção/Civil");
+        categoria_spinner = findViewById(R.id.categoria);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(create_demanda.this, android.R.layout.simple_spinner_item, spinnerArray);
+        categoria_spinner.setAdapter(spinnerAdapter);
+
+
+
     }
 
     public void create_demanda_post(View view) {
+        titulo = titulo_text.getText().toString();
+        descricao = descricao_text.getText().toString();
+        categoria = categoria_spinner.getSelectedItem().toString();
         new Create_Demanda().execute();
     }
+
+
+    private class Get_Categorias extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setLista();
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("id", id);
+                json.put("token", token);
+
+                URL url = new URL("http://webservices.pythonanywhere.com/get_categorias");
+                final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                //connection.setRequestProperty("X-CSRFToken", token);
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                writer.write(json.toString());
+                writer.flush();
+                writer.close();
+                outputStream.close();
+                connection.connect();
+                final int responseCode = connection.getResponseCode();
+                String line = null;
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder builder = new StringBuilder();
+                for (line = null; (line = br.readLine()) != null; ) {
+                    builder.append(line).append("\n");
+                }
+                JSONTokener tokener = new JSONTokener(builder.toString());
+                JSONArray finalResult = new JSONArray(tokener);
+                Log.e("result", finalResult.toString());
+                for(int i = 0; i < finalResult.length() ; i++){
+                    Categoria categoria = new Categoria();
+                    categoria.setCategoria(finalResult.getJSONObject(i).getString("categoria"));
+                    categoria.setId(finalResult.getJSONObject(i).getInt("id"));
+                    spinnerArray.add(finalResult.getJSONObject(i).getString("categoria"));
+                }
+
+
+            } catch (ProtocolException ex) {
+                Log.e("protocol", ex.getMessage());
+            } catch (IOException ex) {
+                Log.e("io", ex.getMessage());
+            } catch (JSONException ex) {
+                Log.e("json", ex.getMessage());
+            }
+            return null;
+        }
+    }
+
 
     private class Create_Demanda extends AsyncTask<Void, Void, Void>{
         @Override
@@ -94,6 +167,7 @@ public class create_demanda extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             dialog.dismiss();
+            startActivity(new Intent(create_demanda.this, demandas.class));
         }
 
         @Override
@@ -106,7 +180,7 @@ public class create_demanda extends AppCompatActivity {
                 json.put("descricao", descricao);
                 json.put("categoria", categoria);
 
-                URL url = new URL("http://192.168.0.105:8000/create_demanda");
+                URL url = new URL("http://webservices.pythonanywhere.com/create_demanda");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -141,7 +215,7 @@ public class create_demanda extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                         }
                     });
-                    startActivity(new Intent(create_demanda.this, demandas.class));
+
                 }
             } catch (ProtocolException ex) {
                 Log.e("protocol", ex.getMessage());

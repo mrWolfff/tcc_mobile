@@ -104,7 +104,7 @@ public class new_proposta extends AppCompatActivity {
     public void date_picker_inicio(View view) {
         final View dialogView = View.inflate(this, R.layout.date_time_piker, null);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-
+        data_texto_inicio.setText("");
         dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,9 +114,8 @@ public class new_proposta extends AppCompatActivity {
                         datePicker.getMonth(),
                         datePicker.getDayOfMonth());
                 Date date = Calendar.getInstance().getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-                data = dateFormat.format(date);
-                data_texto_inicio.setText(data);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                data_texto_inicio.setText(dateFormat.format(date));
                 alertDialog.dismiss();
             }});
         alertDialog.setView(dialogView);
@@ -126,19 +125,25 @@ public class new_proposta extends AppCompatActivity {
     public void date_picker_fim(View view) {
         final View dialogView = View.inflate(this, R.layout.date_time_piker, null);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        data_texto_fim.setText("");
 
         dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePicker datePicker =  dialogView.findViewById(R.id.date_picker);
-                Calendar calendar = new GregorianCalendar(
-                        datePicker.getYear(),
-                        datePicker.getMonth(),
-                        datePicker.getDayOfMonth());
-                Date date = Calendar.getInstance().getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-                data_texto_inicio.setText(dateFormat.format(date));
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth();
+                int year =  datePicker.getYear();
+
+                Date calendar = new Date();
+                calendar.getTime();
+                //calendar.set(year, month, day);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String dateString = sdf.format(calendar);
+                data_texto_fim.setText(dateString);
                 alertDialog.dismiss();
+
+
             }});
         alertDialog.setView(dialogView);
         alertDialog.show();
@@ -179,7 +184,7 @@ public class new_proposta extends AppCompatActivity {
                 json.put("descricao", descricao);
                 json.put("session", session_id);
 
-                URL url = new URL("http://192.168.0.105:8000/get_demandas_user");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_demandas_user");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -227,7 +232,7 @@ public class new_proposta extends AppCompatActivity {
                 json.put("token", token);
                 json.put("session", message_session.getId());
 
-                URL url = new URL("http://192.168.0.105:8000/get_demandas_user");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_demandas_user");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

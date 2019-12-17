@@ -120,6 +120,8 @@ public class Demandas implements Parcelable {
         dest.writeString(this.descricao);
         dest.writeInt(this.user_demanda);
         dest.writeString(this.data);
+        dest.writeString(this.categoria_string);
+        dest.writeString(this.user_demanda_string);
     }
 
     public void readFromParcel(Parcel parcel){
@@ -129,6 +131,8 @@ public class Demandas implements Parcelable {
         this.descricao = parcel.readString();
         this.user_demanda = parcel.readInt();
         this.data = parcel.readString();
+        this.categoria_string = parcel.readString();
+        this.user_demanda_string = parcel.readString();
     }
 
     public static final Parcelable.Creator<Demandas> CREATOR = new Parcelable.Creator<Demandas>(){

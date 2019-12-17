@@ -292,7 +292,7 @@ public class index extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/get_categorias");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_categorias");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -321,7 +321,7 @@ public class index extends AppCompatActivity implements Actions {
                         Categoria categoria = new Categoria();
                         categoria.setId(finalResult.getJSONObject(i).getInt("id"));
                         //categoria.setImagem(getBitmap("https://i2.wp.com/www.mcjb.org.br/wp-content/uploads/2017/05/casa-e-construcao-300x300.jpg"));
-                        categoria.setImagem(getBitmap("http://192.168.0.105:8000"+finalResult.getJSONObject(i).getString("imagem")));
+                        categoria.setImagem(getBitmap("http://webservices.pythonanywhere.com"+finalResult.getJSONObject(i).getString("imagem")));
                         categoria.setCategoria(finalResult.getJSONObject(i).getString("categoria"));
                         listacategorias.add(categoria);
                         Log.e("titulo: ", categoria.getCategoria());
@@ -374,7 +374,7 @@ public class index extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/api/get_info");
+                URL url = new URL("http://webservices.pythonanywhere.com/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

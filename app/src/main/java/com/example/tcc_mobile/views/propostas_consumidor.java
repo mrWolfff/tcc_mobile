@@ -108,7 +108,7 @@ public class propostas_consumidor extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/get_propostas");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_propostas");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

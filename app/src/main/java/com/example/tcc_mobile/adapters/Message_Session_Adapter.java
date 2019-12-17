@@ -44,8 +44,8 @@ public class Message_Session_Adapter extends RecyclerView.Adapter{
         @Override
         public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
             Message_SessionViewHolder holder = (Message_SessionViewHolder) viewHolder;
-            holder.from_user.setText(String.valueOf(lista_message_session.get(i).getFrom_user_string()));
-            holder.to_user.setText(String.valueOf(lista_message_session.get(i).getTo_user_string()));
+            holder.from_user.setText(lista_message_session.get(i).getFrom_user_string());
+            holder.to_user.setText(lista_message_session.get(i).getTo_user_string());
             holder.imageView.setImageBitmap(lista_message_session.get(i).getImagem());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

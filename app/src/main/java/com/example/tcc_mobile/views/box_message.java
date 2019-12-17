@@ -115,7 +115,7 @@ public class box_message extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/get_message_session");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_message_session");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -143,9 +143,8 @@ public class box_message extends AppCompatActivity implements Actions {
                     for(int i = 0; i < finalResult.length() ; i++){
                         Message_Session message_session = new Message_Session();
                         message_session.setId(finalResult.getJSONObject(i).getInt("id"));
-                        message_session.setFrom_user(finalResult.getJSONObject(i).getInt("from_user"));
-                        message_session.setTo_user(finalResult.getJSONObject(i).getInt("to_user"));
-                        Log.e("log", String.valueOf(message_session.getFrom_user()));
+                        message_session.setFrom_user_string(finalResult.getJSONObject(i).getString("from_user"));
+                        message_session.setTo_user_string(finalResult.getJSONObject(i).getString("to_user"));
                         lista_message_session.add(message_session);
                     }
 

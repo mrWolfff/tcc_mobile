@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="2dp"
     app:cardCornerRadius="10dp"
-    app:cardElevation="4dp"
+    app:cardElevation="7dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
     app:cardUseCompatPadding="false"
     app:cardMaxElevation="4dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -17,24 +19,23 @@
 
         <TextView
             android:id="@+id/titulo_text"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="130dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"/>
         <TextView
             android:id="@+id/categoria_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
-        <TextView
-            android:id="@+id/descricao_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
+            android:layout_width="130dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"/>
         <TextView
             android:id="@+id/user_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
-        <TextView
-            android:id="@+id/data_text"
-            android:layout_width="60dp"
-            android:layout_height="80dp" />
+            android:layout_width="130dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

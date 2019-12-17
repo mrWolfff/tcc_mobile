@@ -40,4 +40,7 @@
     <string name="title_activity_concluir_servico">concluir_servico</string>
     <string name="title_activity_cancelar_servico">cancelar_servico</string>
     <string name="title_activity_demanda_atual">demanda_atual</string>
+    <string name="title_activity_perfil">perfil</string>
+    <string name="title_activity_signup_prestador">signup_prestador</string>
+    <string name="title_activity_enviar_message">enviar_message</string>
 </resources>

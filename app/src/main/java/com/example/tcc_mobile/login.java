@@ -101,7 +101,7 @@ public class login extends AppCompatActivity {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/api/get_info");
+                URL url = new URL("http://webservices.pythonanywhere.com/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -170,7 +170,7 @@ public class login extends AppCompatActivity {
                 json.put("username", user);
                 json.put("password", pass);
 
-                URL url = new URL("http://192.168.0.105:8000/api/login");
+                URL url = new URL("http://webservices.pythonanywhere.com/api/login");
                 final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 //String userpass = username + ":" + password;
                 //String autorizacao = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);

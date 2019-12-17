@@ -21,6 +21,15 @@ public class User implements Parcelable {
     private String estado;
     private int categoria;
     private String categoria_user;
+    private float avaliacao;
+
+    public float getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(float avaliacao) {
+        this.avaliacao = avaliacao;
+    }
 
     public int getId() {
         return id;

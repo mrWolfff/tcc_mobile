@@ -29,7 +29,8 @@ import com.example.tcc_mobile.classes.User;
 import com.example.tcc_mobile.interfaces.Actions;
 import com.example.tcc_mobile.touch_helper.TouchHelp;
 import com.example.tcc_mobile.views.box_message;
-import com.example.tcc_mobile.views.categoria_atual;
+import com.example.tcc_mobile.views.demanda_atual;
+import com.example.tcc_mobile.views.perfil;
 import com.example.tcc_mobile.views.servicos;
 import com.google.android.material.navigation.NavigationView;
 
@@ -99,7 +100,7 @@ public class index_prestador extends AppCompatActivity implements Actions {
                         startActivity(intent);
                         break;
                     case R.id.configuration:
-
+                        perfil();
                         break;
                     case R.id.logout:
                         logout_();
@@ -128,6 +129,11 @@ public class index_prestador extends AppCompatActivity implements Actions {
         new Get_Demanda_Index().execute();
 
 
+    }
+
+    public void perfil(){
+        Intent intent = new Intent(this, perfil.class);
+        startActivity(intent);
     }
 
     public void logout_(){
@@ -204,7 +210,7 @@ public class index_prestador extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/index_mobile");
+                URL url = new URL("http://webservices.pythonanywhere.com/index_mobile");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -228,16 +234,16 @@ public class index_prestador extends AppCompatActivity implements Actions {
                     }
                     JSONTokener tokener = new JSONTokener(builder.toString());
                     JSONArray finalResult = new JSONArray(tokener);
+                    Log.e("result", finalResult.toString());
                     for(int i = 0; i < finalResult.length() ; i++){
                         Demandas demanda = new Demandas();
                         demanda.setId(finalResult.getJSONObject(i).getInt("id"));
                         demanda.setTitulo(finalResult.getJSONObject(i).getString("titulo"));
-                        demanda.setCategoria_string(finalResult.getJSONObject(i).getString("categoria"));
                         demanda.setDescricao(finalResult.getJSONObject(i).getString("descricao"));
-                        demanda.setUser_demanda_string(finalResult.getJSONObject(i).getString("user_demanda"));
                         demanda.setData(finalResult.getJSONObject(i).getString("data"));
+                        demanda.setUser_demanda_string(finalResult.getJSONObject(i).getString("user_demanda"));
+                        demanda.setCategoria_string(finalResult.getJSONObject(i).getString("categoria"));
                         listademandas.add(demanda);
-                        Log.e("titulo: ", demanda.getTitulo());
                     }
 
                 }
@@ -261,7 +267,7 @@ public class index_prestador extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/api/get_info");
+                URL url = new URL("http://webservices.pythonanywhere.com/api/get_info");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

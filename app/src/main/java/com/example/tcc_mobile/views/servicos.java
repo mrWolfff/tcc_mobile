@@ -52,10 +52,11 @@ public class servicos extends AppCompatActivity implements Actions {
     List<Servicos>lista_servicos = new ArrayList<>();
     List<Servicos>lista_servicos_cancelados = new ArrayList<>();
     List<Servicos>lista_servicos_concluidos = new ArrayList<>();
-    Servicos_Adapter adapter;
+    Servicos_Adapter adapter[] = new Servicos_Adapter[3];
     RecyclerView recyclerView;
     RecyclerView recyclerView_concluido;
     int proposta;
+    int page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,31 @@ public class servicos extends AppCompatActivity implements Actions {
         viewPager = findViewById(R.id.viewPager_servicos);
         tabLayout = findViewById(R.id.tabLayout_servicos);
         tabAdapter = new TabAdapter(getSupportFragmentManager());
+
         tabAdapter.addFragment(new Tab_Servicos_Ativos(), "Ativos");
         tabAdapter.addFragment(new Tab_Servicos_Cancelados(), "Cancelados");
         tabAdapter.addFragment(new Tab_Servicos_Concluidos(), "Concluídos");
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        page = 0;
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                page = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
 
@@ -100,7 +121,7 @@ public class servicos extends AppCompatActivity implements Actions {
     public void edit(int position) {
         Intent intent = new Intent(this, servico_atual.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("servico", adapter.getLista_servicos().get(position));
+        bundle.putParcelable("servico", adapter[page].getLista_servicos().get(position));
         bundle.putSerializable("position", position);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -108,30 +129,30 @@ public class servicos extends AppCompatActivity implements Actions {
 
 
     private void setRecyclerView(){
-        adapter = new Servicos_Adapter(lista_servicos, this);
+        adapter[0] = new Servicos_Adapter(lista_servicos, this);
         recyclerView =  findViewById(R.id.servicos_ativos_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter[0]);
         //ItemTouchHelper touchHelper = new ItemTouchHelper(new TouchHelp(adapter));
         //touchHelper.attachToRecyclerView(recyclerView);
     }
     private void setRecyclerViewCancelados(){
-        adapter = new Servicos_Adapter(lista_servicos_cancelados, this);
+        adapter[1]= new Servicos_Adapter(lista_servicos_cancelados, this);
         recyclerView = findViewById(R.id.servicos_cancelados_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(servicos.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter[1]);
         //ItemTouchHelper touchHelper = new ItemTouchHelper(new TouchHelp(adapter));
         //touchHelper.attachToRecyclerView(recyclerView);
     }
     private void setRecyclerViewConcluidos(){
-        adapter = new Servicos_Adapter(lista_servicos_concluidos, this);
+        adapter[2] = new Servicos_Adapter(lista_servicos_concluidos, servicos.this);
         recyclerView_concluido =  findViewById(R.id.concluido_recyclerView);
         try {
             recyclerView_concluido.setLayoutManager(new LinearLayoutManager(this));
             recyclerView_concluido.setItemAnimator(new DefaultItemAnimator());
-            recyclerView_concluido.setAdapter(adapter);
+            recyclerView_concluido.setAdapter(adapter[2]);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -155,7 +176,7 @@ public class servicos extends AppCompatActivity implements Actions {
             try {
                 json.put("token", token);
                 json.put("id", id);
-                URL url = new URL("http://192.168.0.105:8000/get_servicos");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_servicos");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");

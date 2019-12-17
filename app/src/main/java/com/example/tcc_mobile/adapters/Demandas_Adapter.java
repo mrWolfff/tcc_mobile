@@ -42,11 +42,9 @@ public class Demandas_Adapter extends RecyclerView.Adapter{
         @Override
         public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
             DemandaViewHolder holder = (DemandaViewHolder) viewHolder;
-            holder.titulo_text.setText(lista_demandas.get(i).getTitulo());
-            holder.categoria_text.setText(String.valueOf(lista_demandas.get(i).getCategoria()));
-            holder.descricao_text.setText(lista_demandas.get(i).getDescricao());
-            holder.user_text.setText(String.valueOf(lista_demandas.get(i).getUser_demanda()));
-            holder.data_text.setText(lista_demandas.get(i).getData());
+            holder.titulo_text.setText("Titulo: "+lista_demandas.get(i).getTitulo());
+            holder.categoria_text.setText("Categoria:"+lista_demandas.get(i).getCategoria_string());
+            holder.user_text.setText("Usuario: "+lista_demandas.get(i).getUser_demanda_string());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -93,18 +91,14 @@ public class Demandas_Adapter extends RecyclerView.Adapter{
 
             TextView titulo_text;
             TextView categoria_text;
-            TextView descricao_text;
             TextView user_text;
-            TextView data_text;
 
             public DemandaViewHolder(@NonNull View itemView) {
                 super(itemView);
                 itemView.setTag(this);
                 titulo_text =  itemView.findViewById(R.id.titulo_text);
                 categoria_text = itemView.findViewById(R.id.categoria_text);
-                descricao_text = itemView.findViewById(R.id.descricao_text);
                 user_text = itemView.findViewById(R.id.user_text);
-                data_text = itemView.findViewById(R.id.data_text);
             }
         }
 }

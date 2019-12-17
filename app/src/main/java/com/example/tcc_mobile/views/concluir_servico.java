@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,9 @@ public class concluir_servico extends AppCompatActivity {
     private RatingBar ratingBar;
     private TextView avaliacao;
     private Button btnSubmit;
+    EditText sugestao_critica;
+    String sugest_crit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class concluir_servico extends AppCompatActivity {
         //Log.e("id_servico_demanda", String.valueOf(servico.getDemanda()));
         addListenerOnRatingBar();
         addListenerOnButton();
+        sugestao_critica = findViewById(R.id.sugestao_critica);
 
     }
 
@@ -79,5 +84,12 @@ public class concluir_servico extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void ok(View view) {
+        if(sugestao_critica.length() > 0){
+            sugest_crit = sugestao_critica.getText().toString();
+
+        }
     }
 }

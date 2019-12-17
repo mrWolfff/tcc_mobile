@@ -78,12 +78,16 @@ public class Message_Session implements Parcelable {
         dest.writeInt(this.id);
         dest.writeInt(this.from_user);
         dest.writeInt(this.to_user);
+        dest.writeString(this.from_user_string);
+        dest.writeString(this.to_user_string);
     }
 
     public void readFromParcel(Parcel parcel){
         this.id = parcel.readInt();
         this.from_user = parcel.readInt();
         this.to_user = parcel.readInt();
+        this.from_user_string = parcel.readString();
+        this.to_user_string = parcel.readString();
     }
 
     public static final Parcelable.Creator<Message_Session> CREATOR = new Parcelable.Creator<Message_Session>(){

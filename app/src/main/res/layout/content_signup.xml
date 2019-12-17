@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/first_name"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_signup" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/last_name"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -48,10 +48,10 @@
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/first_name" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/username_signup"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -63,10 +63,10 @@
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/last_name" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -78,10 +78,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintTop_toBottomOf="@+id/username_signup" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/senha"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -93,10 +93,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <EditText
-        android:id="@+id/editText6"
+        android:id="@+id/confirm_senha"
         android:layout_width="wrap_content"
         android:minWidth="250dp"
         android:layout_marginRight="30dp"
@@ -108,21 +108,21 @@
         android:backgroundTint="@color/cor_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText5" />
-
+        app:layout_constraintTop_toBottomOf="@+id/senha" />
 
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/cor_app"
         android:text="Cadastrar"
         android:textColor="@color/white"
-        android:background="@color/cor_app"
-        android:layout_marginTop="40dp"
+        android:onClick="cadastrar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_signup" />
+        android:layout_marginBottom="30dp"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/spinner_signup"
@@ -133,6 +133,6 @@
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText6"
+        app:layout_constraintTop_toBottomOf="@id/confirm_senha"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

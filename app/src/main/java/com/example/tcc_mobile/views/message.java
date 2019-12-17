@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +24,7 @@ import com.example.tcc_mobile.adapters.Messages_Adapter;
 import com.example.tcc_mobile.classes.Demandas;
 import com.example.tcc_mobile.classes.Message_Session;
 import com.example.tcc_mobile.classes.Messages;
+import com.example.tcc_mobile.classes.User;
 import com.example.tcc_mobile.interfaces.Actions;
 import com.google.android.material.navigation.NavigationView;
 
@@ -61,6 +63,7 @@ public class message extends AppCompatActivity implements Actions {
     int cont_there = 0;
     boolean status;
     int message_session_id;
+    User request_user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +85,14 @@ public class message extends AppCompatActivity implements Actions {
 
         Bundle bundle = getIntent().getExtras();
         message_session = bundle.getParcelable("message_session");
-        position = (int) bundle.getSerializable("position");
+        //position = (int) bundle.getSerializable("position");
         Log.e("sessao ", String.valueOf(message_session.getId()));
 
         message = findViewById(R.id.message);
         sendMessage = findViewById(R.id.send_message);
         message_list = findViewById(R.id.messages_view);
         status = true;
+        new Request_User().execute();
         new Get_Messages().execute();
 
 
@@ -133,18 +137,78 @@ public class message extends AppCompatActivity implements Actions {
     }
 
     public void new_proposta(MenuItem item) {
-        status = false;
-        Intent intent = new Intent(this, new_proposta.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("message_session", message_session);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if(request_user.getCategoria_user().equals("Prestador")) {
+            status = false;
+            Intent intent = new Intent(this, new_proposta.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("message_session", message_session);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),
+                            "Voce nao pode criar propostas! " ,
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void perfil_user(MenuItem item) {
     }
 
     public void logout(MenuItem item) {
+    }
+
+    private class Request_User extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("token", token);
+                json.put("id", id);
+                URL url = new URL("http://webservices.pythonanywhere.com/api/get_info");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                writer.write(json.toString());
+                writer.flush();
+                writer.close();
+                outputStream.close();
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line = null;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder builder = new StringBuilder();
+                    for (line = null; (line = br.readLine()) != null; ) {
+                        builder.append(line).append("\n");
+                    }
+                    JSONTokener tokener = new JSONTokener(builder.toString());
+                    JSONObject finalResult = new JSONObject(tokener);
+                    request_user.setID(finalResult.getInt("id"));
+                    request_user.setCategoria_user(finalResult.getString("categoria"));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (MalformedURLException e) {
+                Log.e("connection_error_url", e.getMessage());
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "Usuario ou senha incorretos!", Toast.LENGTH_SHORT).show();
+                Log.e("connection_error_io", e.getMessage());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     private class Get_Messages extends AsyncTask<Void,Void,Void> {
@@ -157,7 +221,7 @@ public class message extends AppCompatActivity implements Actions {
                     public void run() {
                         new Get_Messages_Loop().execute();
                     }
-                }, 0, 3000);
+                }, 0, 5000);
 
         }
 
@@ -168,7 +232,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("token", token);
                 json.put("id", id);
                 json.put("message_session", message_session.getId());
-                URL url = new URL("http://192.168.0.105:8000/get_messages");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_messages");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -247,7 +311,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("id", id);
                 json.put("message", text);
                 json.put("message_session", message_session.getId());
-                URL url = new URL("http://192.168.0.105:8000/send_message");
+                URL url = new URL("http://webservices.pythonanywhere.com/send_message");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -293,7 +357,7 @@ public class message extends AppCompatActivity implements Actions {
                 json.put("id", id);
                 json.put("message_session", message_session.getId());
                 json.put("cont_there", cont_there);
-                URL url = new URL("http://192.168.0.105:8000/get_messages_loop");
+                URL url = new URL("http://webservices.pythonanywhere.com/get_messages_loop");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -326,9 +390,6 @@ public class message extends AppCompatActivity implements Actions {
                         }
                     });
                     for(int i = 0; i < finalResult.length() ; i++){
-                        try{ cont_there = finalResult.getJSONObject(i).getInt("cont_there");
-                        }catch(Exception e){
-                        }
                         final Messages message = new Messages();
                         message.setSession(finalResult.getJSONObject(i).getInt("session"));
                         message.setMessage(finalResult.getJSONObject(i).getString("message"));
